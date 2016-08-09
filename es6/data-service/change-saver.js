@@ -1,11 +1,12 @@
 import { prepareSaveBundle } from './utils';
+import config from './config';
 
 export default class ChangeSaver {
   constructor(saveBundle, saveContext, {promiseFactory, $}) {
     this.saveBundle = saveBundle;
     this.saveContext = saveContext;
-    this.promiseFactory = promiseFactory || Q;
-    this.$ = $;    
+    this.promiseFactory = promiseFactory || config.promiseFactory || Q;
+    this.cookie = config.cookie || $.cookie;    
   }
 
   get deferred() {
@@ -61,10 +62,13 @@ export default class ChangeSaver {
   get rootEntityId() {
     return this.rootEntity.id || this.rootEntity.id();
   }
-  
+
+  get resourceUrl() {
+    return [this.baseUrl, this.resourceName].join('/');
+  }  
 
   get url() {
-    let url = [this.baseUrl, resourceName].join('/');
+    let url = this.resourceUrl;
 
     if (verb != 'POST') {
         if (!this.rootEntityId) {
@@ -81,13 +85,18 @@ export default class ChangeSaver {
     this.saveContext.entityManager.metadataStore.getEntityType(this.firstEntityName);
   }
 
+  // override this to pluralise or add api prefix etc
+  get remoteApiResourceName() {
+    return this.resourceName(); 
+  }
+
   get resourceName() {
     const entityType = this.entityType;
-    return entityType.resourceName || entityType.defaultResourceName;
+    return entityType.shortName || entityType.defaultResourceName;
   }
 
   get apiManagerToken() {
-    return this.$.cookie('cvp_api_access_token');
+    return this.cookie('cvp_api_access_token');
   }
 
   save() {            

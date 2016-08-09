@@ -58,6 +58,56 @@ class MyServiceAdapter extends ServiceAdapter {
 breeze.config.registerAdapter('dataService', MyServiceAdapter);
 ```
 
+Please see the docs for [Breeze DataServiceAdapter](http://breeze.github.io/doc-js/server-dataserviceadapter.html)
+
+Note: You can also create/use a [custom ajax adapter](http://breeze.github.io/doc-js/server-ajaxadapter.html)
+
+`breeze.config.registerAdapter('ajax', myAjaxAdapter);`
+
+Alternatively configure this on the `serviceConfig` object f.ex by merging on top of the base `serviceConfig` we provide.  
+
+```js
+const myServiceConfig = Object.assign(serviceConfig, {
+	// ...
+  ajax: null,
+  promiseFactory: null,
+})
+```
+
+The default promiseFactory is [Q](https://github.com/kriskowal/q) 
+
+## Sample customization
+
+Install node `inflection` for pluralize functionality.
+
+`npm install inflection --save`
+
+```js
+import { serviceConfig } from 'breeze-rest-adapter/es6/data-service/';
+import inflection from 'inflection';
+
+class MyChangeSaver extends serviceConfig.ChangeSaver {
+	constructor() {
+		super();
+		this.serviceConfig = serviceConfig;		
+	}
+
+	// we pluralize the resource name
+	// this will make the url for a Person entityType
+	// something like `persons/id` 
+	// instead of the default `person/id`
+  get remoteApiResourceName() {
+    return inflection.pluralize( this.resourceName() ); 
+  }	
+}
+
+// use our custom ChangeSaver
+serviceConfig.ChangeSaver = MyChangeSaver;
+
+// ...
+```
+
+
 # Overview
 
 This adapter was implemented to allow integration between BreezeJS entities in the browser to a REST-ful service.
@@ -158,6 +208,72 @@ and returns to Breeze all the entities it finds in the result.
 Include the following code when setting up your Breeze Data Service:
 
 `breeze.config.initializeAdapterInstances({dataService: "REST"});`
+
+## More
+
+From the RubyOnRails sample app, we find the following function.
+Notice how the url is constructed based on `entityType.shortName` in `var entityTypeShortName =  entity.entityType.shortName;` 
+and then pluralised: `var url = saveContext.dataService.makeUrl(this.pluralize(entityTypeShortName));
+
+```js
+function getRequestInfo(saveContext, saveBundle){
+
+		var em = saveContext.entityManager;
+		var helper = em.helper;
+		var metadataStore = em.metadataStore;
+		var entityInfos = [];
+		saveContext.entityInfos = entityInfos;
+
+		// TODO: handle multiple entities in single saveChanges() request
+		if (saveBundle.entities.length > 1) {
+				throw new Error("Can only save one entity at a time; multi-entity save is not yet implemented.")
+		}
+
+		var entity = saveBundle.entities[0]
+		var aspect = entity.entityAspect;
+		var key =  aspect.getKey();
+		var id =  key.values.join(',');
+		var entityTypeShortName =  entity.entityType.shortName;
+		var serverTypeName = entityTypeShortName.toLowerCase();
+
+		var entityInfo = {
+				entityState: aspect.entityState,
+				key: key,
+				serverTypeName: serverTypeName
+		};
+		entityInfos.push(entityInfo);
+
+		var url = saveContext.dataService.makeUrl(this.pluralize(entityTypeShortName));
+		var data = {};
+		var entityStateName =  aspect.entityState.name;
+		switch (entityStateName){
+				case 'Added':
+						var raw =  helper.unwrapInstance(entity, true, true);
+						delete raw.id; // hack until we augment unwrapInstance in Breeze
+						data[serverTypeName] = raw;
+						return {
+								method: 'POST',
+								url: url,
+								data: JSON.stringify(data)
+						}
+				case 'Modified':
+						data[serverTypeName] = helper.unwrapChangedValues(entity, metadataStore, true);
+						return {
+								method: 'PUT',
+								url: url+'/'+id,
+								data: JSON.stringify(data)
+						}
+
+				case 'Deleted':
+						return {
+								method: 'DELETE',
+								url: url+'/'+id
+						}
+				default:
+						throw new Error('Cannot save an entity with state = '+entityStateName);
+		}
+}
+```		
 
 
 

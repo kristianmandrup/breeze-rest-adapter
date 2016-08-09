@@ -1,4 +1,4 @@
-import { createError, handleXHRError } from './error-handlers';
+import config from './config';
 
 function createSuccessCb(defereed) {
   return function successCb(data, textStatus, XHR) {
@@ -14,7 +14,7 @@ function createSuccessCb(defereed) {
       XHR.onreadystatechange = null;
       XHR.abort = null;
     } catch(e) {
-      var error = e instanceof Error ? e : createError(XHR);
+      var error = e instanceof Error ? e : config.createError(XHR);
       // needed because it doesn't look like jquery calls .fail if an error occurs within the function
       deferred.reject(error);
       XHR.onreadystatechange = null;
@@ -25,7 +25,7 @@ function createSuccessCb(defereed) {
 
 export default class QueryExecuter {
   constructor(mappingContext, {ajax, promiseFactory}) {
-    this.promiseFactory = promiseFactory || Q;
+    this.promiseFactory = promiseFactory || config.promiseFactory || Q;
   }
     
   get deferred() {
@@ -38,7 +38,7 @@ export default class QueryExecuter {
         dataType: 'json',
         success: createSuccessCb(this.deferred),
         error: function(XHR, textStatus, errorThrown) {
-            handleXHRError(deferred, XHR);
+            config.handleXHRError(deferred, XHR);
         }
     };
   }

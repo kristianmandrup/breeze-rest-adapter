@@ -79,14 +79,14 @@ function defaultSuccessCb(data, textStatus, XHR) {
         saveContext: saveContext
     });
 
-    $.each(responseEntities, prepareEntity);
+    responseEntities.forEach(prepareEntity);
 
     var saveResult = { entities: rawEntities, keyMappings: keyMappings, XHR: XHR };
     deferred.resolve(saveResult);
 }
 
 function defaultErrorCb(XHR, textStatus, errorThrown) {
-    handleXHRError(deferred, XHR);
+    config.handleXHRError(deferred, XHR);
 }
 
 export default function createAjaxBundleSaver(ajaxImpl) {

@@ -1,17 +1,21 @@
-import visitNode from './data-service/visit-node';
-import createAjaxBundleSaver from './data-service/bundle-saver';
-import ChangeSaver from './data-service/change-saver';
-import QueryExecuter from './data-service/query-executer';
-import RestJsonResultsAdapter from '../result-adapter/rest-json-results-adapter';
+import visitNode from './visit-node';
+import createAjaxBundleSaver from './bundle-saver';
+import ChangeSaver from './change-saver';
+import QueryExecuter from './query-executer';
+import RestJsonResultsAdapter from '../rest-json-results-adapter';
+import { createError, handleXHRError } from './error-handlers';
 
 export default {
   visitNode: visitNode,
+  createError: createError,
+  handleXHRError: handleXHRError,
   createAjaxBundleSaver: createAjaxBundleSaver,
   ChangeSaver: ChangeSaver,
-  QueryExecuter: QueryExecuter
+  QueryExecuter: QueryExecuter,
   RestJsonResultsAdapter: RestJsonResultsAdapter,
   JsonResultsAdapter: breeze.JsonResultsAdapter,
-  ajax: null
+  ajax: null,
+  promiseFactory: null,
 }
 
 
