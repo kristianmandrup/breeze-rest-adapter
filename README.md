@@ -3,6 +3,16 @@ breeze-rest-adapter
 
 A dataservice adapter for BreezeJS to connect to a generic REST API.
 
+## Usage
+
+`npm i breeze-rest-adapter --save`
+
+Just use ES6 `import`
+
+```
+import 'breeze-rest-adapter';
+```
+
 # Overview
 
 This adapter was implemented to allow integration between BreezeJS entities in the browser to a REST-ful service.
@@ -45,7 +55,7 @@ This example differs in that it makes the assumption that your resources can act
 			"entityState": "Modified"
 		}
 	}
-	
+
 Here we have an 'Order' entity, with child properties that also entities, an 'OrderHeader' entity, and a collection of 'OrderLineItem' entities.
 The data service adapter will look at all the changed entities in the local cache and build an object graph (based on the defined relationships
 in the metadata).

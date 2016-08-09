@@ -1,0 +1,24 @@
+{
+  "name": "breeze-rest-adapter",
+  "version": "1.0.0",
+  "description": "Breeze generic REST adapter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kristianmandrup/breeze-rest-adapter.git"
+  },
+  "keywords": [
+    "breeze",
+    "rest",
+    "adapter"
+  ],
+  "author": "Kristian Mandrup",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kristianmandrup/breeze-rest-adapter/issues"
+  },
+  "homepage": "https://github.com/kristianmandrup/breeze-rest-adapter#readme"
+}
