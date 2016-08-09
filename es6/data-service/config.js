@@ -14,8 +14,8 @@ export default {
   QueryExecuter: QueryExecuter,
   RestJsonResultsAdapter: RestJsonResultsAdapter,
   JsonResultsAdapter: breeze.JsonResultsAdapter,
-  ajax: null,
-  promiseFactory: null,
+  ajax: null, // “jQuery” adapter is the default AJAX adapter
+  promiseFactory: null // Q by default
 }
 
 

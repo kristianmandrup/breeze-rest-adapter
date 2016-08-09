@@ -76,6 +76,23 @@ const myServiceConfig = Object.assign(serviceConfig, {
 
 The default promiseFactory is [Q](https://github.com/kriskowal/q) 
 
+The full config object:
+
+```js
+export default {
+  visitNode: visitNode,
+  createError: createError,
+  handleXHRError: handleXHRError,
+  createAjaxBundleSaver: createAjaxBundleSaver,
+  ChangeSaver: ChangeSaver,
+  QueryExecuter: QueryExecuter,
+  RestJsonResultsAdapter: RestJsonResultsAdapter,
+  JsonResultsAdapter: breeze.JsonResultsAdapter,
+  ajax: null, // “jQuery” adapter is the default AJAX adapter
+  promiseFactory: null, // Q by default
+}
+```
+
 ## Sample customization
 
 Install node `inflection` for pluralize functionality.
