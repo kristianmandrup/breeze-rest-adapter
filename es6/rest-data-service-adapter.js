@@ -1,17 +1,9 @@
-import createAjaxBundleSaver from './data-service/bundle-saver';
-import visitNode from './data-service/visit-node';
-
-import ChangeSaver from './data-service/change-saver';
-import QueryExecuter from './data-service/query-executer';
-import RestJsonResultsAdapter from './rest-json-results-adapter';
-
-const core = breeze.core;
-
-const JsonResultsAdapter = breeze.JsonResultsAdapter;
+import serviceConfig from './data-service/config';
 
 export default class RestDataServiceAdapter {
   constructor() {
     this.name = 'REST';
+    this.serviceConfig = serviceConfig;
   }
 
   checkForRecomposition(interfaceInitializedArgs) {
@@ -21,7 +13,12 @@ export default class RestDataServiceAdapter {
   }
 
   initialize() {
-      const ajaxImpl = breeze.config.getAdapterInstance('ajax');
+      this.ChangeSaver = serviceConfig.ChangeSaver;
+      this.QueryExecuter = serviceConfig.QueryExecuter;
+      this.JsonResultsAdapter = serviceConfig.JsonResultsAdapter;
+      this.visitNode = serviceConfig.visitNode;
+
+      const ajaxImpl = serviceConfig.ajax || breeze.config.getAdapterInstance('ajax');
       this.ajax = createAjaxBundleSaver(ajaxImpl);
 
       if (!ajaxImpl) {
@@ -41,18 +38,18 @@ export default class RestDataServiceAdapter {
   }
 
   executeQuery(mappingContext) {
-    return new QueryExecuter(mappingContext, {ajax: this.ajaxImpl.ajax})
+    return new this.QueryExecuter(mappingContext, {ajax: this.ajaxImpl.ajax})
   }
 
   saveChanges(saveContext, saveBundle) {
-    return new ChangeSaver(saveContext, saveBundle).save();
-  }  
+    return new this.ChangeSaver(saveContext, saveBundle).save();
+  }
 
   get jsonResultsAdapter() {
-    return new JsonResultsAdapter({
+    return new this.JsonResultsAdapter({
         name: 'webApi_default',
 
-        visitNode: visitNode
+        visitNode: this.visitNode
     });
-  }      
+  }
 }

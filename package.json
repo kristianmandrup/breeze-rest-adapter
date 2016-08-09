@@ -20,5 +20,7 @@
   "bugs": {
     "url": "https://github.com/kristianmandrup/breeze-rest-adapter/issues"
   },
-  "homepage": "https://github.com/kristianmandrup/breeze-rest-adapter#readme"
+  "homepage": "https://github.com/kristianmandrup/breeze-rest-adapter#readme",
+  "dependencies": {
+  }
 }

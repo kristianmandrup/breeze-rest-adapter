@@ -40,6 +40,24 @@ This conversion has not yet been tested so consider it a WIP.
 
 Suggestion: Ideally you would somehow swap out the use of old school XHR with the new Fetch API.
 
+### Creating your own ServiceAdapter
+
+Simply extend the provided `ServiceAdapter` and replace the `serviceConfig` with your own. Then register the adapter.
+
+```js
+import { ServiceAdapter } from 'breeze-rest-adapter/es6';
+import myServiceConfig from './myServiceConfig';
+
+class MyServiceAdapter extends ServiceAdapter {
+	constructor() {
+		super();
+		this.serviceConfig = myServiceConfig;
+	}
+}
+
+breeze.config.registerAdapter('dataService', MyServiceAdapter);
+```
+
 # Overview
 
 This adapter was implemented to allow integration between BreezeJS entities in the browser to a REST-ful service.
