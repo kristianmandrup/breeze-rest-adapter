@@ -9,9 +9,26 @@ A dataservice adapter for BreezeJS to connect to a generic REST API.
 
 Just use ES6 `import`
 
-```
+```js
 import 'breeze-rest-adapter';
 ```
+
+## Experimental ES6 support
+
+```js
+import 'breeze-rest-adapter/es6';
+```
+
+You can also include the classes directly in order to customize for your needs: 
+
+```js
+import { ServiceAdapter, ResultsAdapter } from 'breeze-rest-adapter/es6';`
+```
+
+The ES6 code should be much easier to understand and customize if you need to. 
+This conversion has not yet been tested so consider it a WIP.
+
+Suggestion: Ideally you would somehow swap out the use of old school XHR with the new Fetch API.
 
 # Overview
 
