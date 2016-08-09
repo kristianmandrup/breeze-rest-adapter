@@ -22,8 +22,18 @@ import 'breeze-rest-adapter/es6';
 You can also include the classes directly in order to customize for your needs: 
 
 ```js
-import { ServiceAdapter, ResultsAdapter } from 'breeze-rest-adapter/es6';`
+`import { ServiceAdapter, ResultsAdapter, default as register } from 'breeze-rest-adapter/es6';`
 ```
+
+Then register the `ServiceAdapter` with breeze: `register(breeze);`
+
+This will call `breeze.config.registerAdapter('dataService', ServiceAdapter);`
+
+The `ServiceAdapter` class has a property `name = 'REST'` which identifies it.
+
+Now configure breeze to use the registered `REST` data service as follows:
+
+`breeze.config.initializeAdapterInstances({dataService: 'REST'});`
 
 The ES6 code should be much easier to understand and customize if you need to. 
 This conversion has not yet been tested so consider it a WIP.
