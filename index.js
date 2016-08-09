@@ -8,5 +8,5 @@
 //   RestJsonResultsAdapter: RestJsonResultsAdapter
 // }
 
-require('./lib/breezeRestDataServiceAdapter');
-require('./lib/breezeRestJsonResultsAdapter');
+require('./breezeRestDataServiceAdapter');
+require('./breezeRestJsonResultsAdapter');
